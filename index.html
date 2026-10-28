@@ -167,8 +167,7 @@
        Vturb / Panda / Vimeo: cole o código que a plataforma fornecer.
      O quadro já tem o formato 9:16 (vídeo em pé) e ajusta o vídeo sozinho. -->
 <div class="sb-vsl relative mx-auto w-full">
-<iframe id="sb-vsl-player" src="https://player.vimeo.com/video/1240073111?autoplay=1&amp;muted=1&amp;loop=1&amp;autopause=0&amp;title=0&amp;byline=0&amp;portrait=0&amp;playsinline=1" title="VSL Salário Blindado" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-<button type="button" class="sb-vsl-unmute" id="sb-vsl-unmute" aria-label="Assistir o vídeo com som desde o início"><span class="sb-vsl-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span><b>Seu vídeo já começou</b><span>Toque para assistir com som 🔊</span></button></div></div>
+<iframe src="https://player.vimeo.com/video/1240073111?title=0&amp;byline=0&amp;portrait=0&amp;playsinline=1" title="VSL Salário Blindado" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div></div>
 <p class="sb-hero-benefits-lead">Com o Salário Blindado você vai:</p>
 <ul class="sb-hero-benefits">
 <li><span class="sb-hb-ic" aria-hidden="true">💸</span><span><strong>Descobrir para onde seu salário está indo</strong>, real por real</span></li>
@@ -361,23 +360,6 @@
 
 </main>
 
-<script src="https://player.vimeo.com/api/player.js"></script>
-<script>
-/* VSL: no toque, volta ao início, liga o som e toca com os controles normais */
-(function () {
-  var btn = document.getElementById('sb-vsl-unmute');
-  var frame = document.getElementById('sb-vsl-player');
-  if (!btn || !frame || !window.Vimeo) { if (btn) btn.hidden = true; return; }
-  var player = new Vimeo.Player(frame);
-  btn.addEventListener('click', function () {
-    btn.hidden = true;
-    player.setLoop(false).catch(function () {});
-    player.setCurrentTime(0).catch(function () {});
-    player.setMuted(false).then(function () { return player.setVolume(1); }).catch(function () {});
-    player.play().catch(function () {});
-  });
-})();
-</script>
 <script>
 /* Carrosséis: bolinhas, setas e contador; autoplay opcional (data-autoplay em ms).
    data-mobile-only: só vira carrossel em telas menores que 768px. */
