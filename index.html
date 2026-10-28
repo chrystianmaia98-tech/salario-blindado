@@ -125,6 +125,14 @@
 .sb-vsl-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:1rem;background:radial-gradient(circle at 50% 40%,#124b35 0,#06281c 70%)}
 .sb-vsl-play{display:grid;place-items:center;width:4.5rem;height:4.5rem;border-radius:9999px;background:linear-gradient(180deg,#f7d774,#d4a72c);color:#1a1405;box-shadow:0 0 0 10px rgba(212,167,44,.18),0 10px 30px rgba(212,167,44,.35)}
 .sb-vsl-play svg{width:2rem;height:2rem;margin-left:.2rem}
+/* VSL: roda muda de fundo; o botão por cima reinicia com som */
+.sb-vsl-unmute{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.55rem;padding:1rem;border:0;cursor:pointer;background:rgba(3,20,13,.45);color:#f2f7f3;text-align:center;-webkit-tap-highlight-color:transparent}
+.sb-vsl-unmute .sb-vsl-play{animation:sb-vsl-pulse 1.6s ease-in-out infinite}
+.sb-vsl-unmute b{margin-top:.4rem;font-family:var(--font-display,inherit);font-size:1.15rem;font-weight:800;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.sb-vsl-unmute > span:last-child{padding:.35rem .8rem;border-radius:9999px;background:#d4a72c;color:#1a1405;font-size:.85rem;font-weight:800}
+.sb-vsl-unmute[hidden]{display:none}
+@keyframes sb-vsl-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@media (prefers-reduced-motion: reduce){.sb-vsl-unmute .sb-vsl-play{animation:none}}
 /* Foto do criador: formas verde e dourada atrás, moldura e selo com o logo */
 .sb-author{position:relative;max-width:30rem;margin:0 auto;padding:1.5rem 1.5rem 2.5rem;isolation:isolate}
 .sb-author-blob{position:absolute;z-index:-2;inset:12% 0 6% 10%;border-radius:46% 54% 40% 60%/55% 45% 55% 45%;background:linear-gradient(140deg,#0f5a3c 0%,#0a3424 55%,#06281c 100%);box-shadow:0 30px 60px rgba(6,40,28,.35)}
@@ -159,7 +167,8 @@
        Vturb / Panda / Vimeo: cole o código que a plataforma fornecer.
      O quadro já tem o formato 9:16 (vídeo em pé) e ajusta o vídeo sozinho. -->
 <div class="sb-vsl relative mx-auto w-full">
-<iframe src="https://player.vimeo.com/video/1240073111?title=0&amp;byline=0&amp;portrait=0&amp;playsinline=1" title="VSL Salário Blindado" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div></div>
+<iframe id="sb-vsl-player" src="https://player.vimeo.com/video/1240073111?autoplay=1&amp;muted=1&amp;loop=1&amp;autopause=0&amp;title=0&amp;byline=0&amp;portrait=0&amp;playsinline=1" title="VSL Salário Blindado" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<button type="button" class="sb-vsl-unmute" id="sb-vsl-unmute" aria-label="Assistir o vídeo com som desde o início"><span class="sb-vsl-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span><b>Seu vídeo já começou</b><span>Toque para assistir com som 🔊</span></button></div></div>
 <p class="sb-hero-benefits-lead">Com o Salário Blindado você vai:</p>
 <ul class="sb-hero-benefits">
 <li><span class="sb-hb-ic" aria-hidden="true">💸</span><span><strong>Descobrir para onde seu salário está indo</strong>, real por real</span></li>
@@ -352,6 +361,23 @@
 
 </main>
 
+<script src="https://player.vimeo.com/api/player.js"></script>
+<script>
+/* VSL: no toque, volta ao início, liga o som e toca com os controles normais */
+(function () {
+  var btn = document.getElementById('sb-vsl-unmute');
+  var frame = document.getElementById('sb-vsl-player');
+  if (!btn || !frame || !window.Vimeo) { if (btn) btn.hidden = true; return; }
+  var player = new Vimeo.Player(frame);
+  btn.addEventListener('click', function () {
+    btn.hidden = true;
+    player.setLoop(false).catch(function () {});
+    player.setCurrentTime(0).catch(function () {});
+    player.setMuted(false).then(function () { return player.setVolume(1); }).catch(function () {});
+    player.play().catch(function () {});
+  });
+})();
+</script>
 <script>
 /* Carrosséis: bolinhas, setas e contador; autoplay opcional (data-autoplay em ms).
    data-mobile-only: só vira carrossel em telas menores que 768px. */
